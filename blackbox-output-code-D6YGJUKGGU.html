@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Bakat Minat Jurusan Kuliah</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        h2 {
+            color: #34495e;
+        }
+
+        #quiz-section, #results-section, #reflection-section {
+            margin-bottom: 40px;
+        }
+
+        #question-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #options {
+            margin: 20px 0;
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .option:hover {
+            background: #d5dbdb;
+        }
+
+        .option.selected {
+            background: #3498db;
+            color: white;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        #progress {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .result-item h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .result-item ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .result-item p {
+            margin: 10px 0;
+        }
+
+        /* Mobile-friendly */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            #question-container {
+                padding: 15px;
+            }
+            .option {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tes Bakat Minat Jurusan Kuliah</h1>
+            <p>Hai, kalau lagi bingung antara kuliah atau jalur kedinasan, coba tes ini dulu. Ini bukan ramalan masa depan, tapi panduan buat mikir lebih jauh. Jawab jujur ya, biar hasilnya berguna.</p>
+        </header>
+
+        <section id="quiz-section">
+            <div id="question-container">
+                <h2 id="question-text"></h2>
+                <div id="options"></div>
+                <button id="next-btn" style="display:none;">Lanjut</button>
+            </div>
+            <div id="progress">Pertanyaan 1 dari 20</div>
+        </section>
+
+        <section id="results-section" style="display:none;">
+            <h2>Hasil Tes Kamu</h2>
+            <p>Berdasarkan jawabanmu, ini jurusan yang mungkin cocok. Ingat, ini bukan keputusan mutlak—coba cari tahu lebih lanjut.</p>
+            <div id="results-list"></div>
+        </section>
+
+        <section id="reflection-section" style="display:none;">
+            <h2>Kenapa Kuliah Itu Layak Dipilih?</h2>
+            <p>Kuliah bukan cuma soal gelar atau status, tapi alat buat buka pintu lebih banyak. Bayangin aja, dunia kerja sekarang butuh skill yang fleksibel—bukan cuma ikut aturan. Dengan kuliah, kamu bisa belajar cara berpikir kritis, adaptasi, dan eksplorasi bidang yang bikin kamu excited. Bedanya dengan kedinasan? Kuliah kasih kamu kontrol lebih besar atas masa depanmu. Bukan jaminan sukses instan, tapi investasi jangka panjang yang realistis. Kalau kamu suka tantangan dan mau bangun karier sesuai passion, kuliah bisa jadi langkah awal yang solid. Tapi ya, keputusan akhir tetep di tanganmu—coba bandingkan dengan opsi lain.</p>
+        </section>
+    </div>
+
+    <script>
+        // Data pertanyaan: Array of objects, each with question, options, and scores for categories
+        const questions = [
+            {
+                question: "Kamu lebih suka menghabiskan waktu dengan apa?",
+                options: [
+                    { text: "Membaca buku atau artikel ilmiah", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Berdiskusi tentang isu sosial", scores: { teknik: 0, medis: 0, bisnis: 0, hukum: 1, sosial: 1 } },
+                    { text: "Mengerjakan proyek kreatif atau teknis", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Cara berpikirmu lebih ke?",
+                options: [
+                    { text: "Logis dan analitis", scores: { teknik: 1, medis: 1, bisnis: 1, hukum: 0, sosial: 0 } },
+                    { text: "Intuitif dan empati", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Strategis dan praktis", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Kebiasaan belajarmu seperti apa?",
+                options: [
+                    { text: "Belajar mandiri dengan buku atau online", scores: { teknik: 1, medis: 1, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Diskusi kelompok atau presentasi", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 1 } },
+                    { text: "Praktik langsung atau eksperimen", scores: { teknik: 1, medis: 1, bisnis: 0, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Bidang apa yang paling menarik bagimu?",
+                options: [
+                    { text: "Teknologi atau sains", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Kesehatan atau manusia", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Bisnis atau ekonomi", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Tipe kepribadianmu lebih seperti?",
+                options: [
+                    { text: "Introvert dan fokus detail", scores: { teknik: 1, medis: 1, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Ekstrovert dan suka interaksi", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 1 } },
+                    { text: "Kreatif dan inovatif", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Kalau dikasih tugas, kamu lebih suka?",
+                options: [
+                    { text: "Menganalisis data atau angka", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } },
+                    { text: "Membantu orang atau menyelesaikan konflik", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 1, sosial: 1 } },
+                    { text: "Membuat sesuatu yang baru", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Minatmu ke bidang apa?",
+                options: [
+                    { text: "Informatika atau engineering", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Psikologi atau pendidikan", scores: { teknik: 0, medis: 0, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Manajemen atau hukum", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Cara kamu menghadapi masalah?",
+                options: [
+                    { text: "Cari solusi logis dan sistematis", scores: { teknik: 1, medis: 1, bisnis: 1, hukum: 0, sosial: 0 } },
+                    { text: "Dengarkan pendapat orang lain", scores: { teknik: 0, medis: 0, bisnis: 0, hukum: 1, sosial: 1 } },
+                    { text: "Coba-coba dan eksperimen", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Kamu lebih tertarik dengan?",
+                options: [
+                    { text: "Teknologi masa depan", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Isu kesehatan masyarakat", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Strategi bisnis global", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Kebiasaan harianmu melibatkan?",
+                options: [
+                    { text: "Membaca berita teknologi", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Berinteraksi dengan teman", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 1 } },
+                    { text: "Belajar skill baru secara mandiri", scores: { teknik: 1, medis: 1, bisnis: 0, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Apa yang membuatmu excited?",
+                options: [
+                    { text: "Menyelesaikan puzzle atau kode", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Membantu orang dalam kesulitan", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Merencanakan proyek besar", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Cara berpikir kreatifmu?",
+                options: [
+                    { text: "Melalui inovasi teknis", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } },
+                    { text: "Melalui empati dan pemahaman", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Melalui strategi dan negosiasi", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Minat belajarmu ke?",
+                options: [
+                    { text: "Matematika atau fisika", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Biologi atau psikologi", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Ekonomi atau hukum", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Tipe orang seperti apa kamu?",
+                options: [
+                    { text: "Analitis dan teliti", scores: { teknik: 1, medis: 1, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Sosial dan komunikatif", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 1 } },
+                    { text: "Praktis dan hands-on", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Apa yang kamu hindari?",
+                options: [
+                    { text: "Kerja rutin tanpa tantangan", scores: { teknik: 1, medis: 0, bisnis: 1, hukum: 0, sosial: 0 } },
+                    { text: "Konflik atau ketegangan sosial", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 1, sosial: 1 } },
+                    { text: "Risiko tinggi tanpa perencanaan", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Bidang apa yang ingin kamu kuasai?",
+                options: [
+                    { text: "Programming atau desain", scores: { teknik: 1, medis: 0, bisnis: 0, hukum: 0, sosial: 0 } },
+                    { text: "Kesehatan atau konseling", scores: { teknik: 0, medis: 1, bisnis: 0, hukum: 0, sosial: 1 } },
+                    { text: "Bisnis atau advokasi", scores: { teknik: 0, medis: 0, bisnis: 1, hukum: 1, sosial: 0 } }
+                ]
+            },
+            {
+                question: "Cara kamu belajar terbaik?",
+                options:
